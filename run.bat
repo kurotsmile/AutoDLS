@@ -1,1 +1,1 @@
-python auto.py
+python game.py
