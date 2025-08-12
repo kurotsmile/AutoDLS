@@ -12,6 +12,34 @@ from tkinter import messagebox
 TAP_DELAY = 3
 running = False
 adb_path = os.path.join(os.getcwd(), "adb.exe")
+scrcpy_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scrcpy.exe")
+LDPLAYER_PATH = r'"C:\LDPlayer\LDPlayer4.0\dnplayer.exe"'
+
+def start_emulator():
+    update_status("🔄 Đang khởi động giả lập...")
+    os.system(f'start {LDPLAYER_PATH}')
+    time.sleep(15)
+
+def start_scrcpy_usb():
+    try:
+        update_status("🔄 Khởi động lại ADB...")
+        subprocess.run([adb_path, "kill-server"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run([adb_path, "start-server"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        update_status("🔍 Kiểm tra thiết bị USB...")
+        result = subprocess.run([adb_path, "devices"], capture_output=True, text=True)
+        lines = result.stdout.strip().split("\n")
+
+        if len(lines) <= 1 or not lines[1].strip().endswith("device"):
+            update_status("⚠ Không tìm thấy thiết bị USB. Hãy cắm cáp và bật USB Debugging.")
+            return
+
+        update_status("🚀 Mở scrcpy...")
+        subprocess.Popen([scrcpy_path], shell=True)
+        update_status("✅ Scrcpy đã khởi động thành công qua USB.")
+
+    except Exception as e:
+        update_status("❌ Lỗi khi khởi động scrcpy:", e)
 
 def open_game():
     update_status("🔌 Đang kết nối điện thoại...")
@@ -23,7 +51,6 @@ def open_game():
 
 def tap(x, y):
     subprocess.run([adb_path, "shell", "input", "tap", str(x), str(y)])
-
 
 def swipe(x1, y1, x2, y2, duration_ms):
     subprocess.run([adb_path, "shell", "input", "swipe",str(x1), str(y1), str(x2), str(y2), str(duration_ms)], check=True)
@@ -50,17 +77,16 @@ def near_goal():
 
 def open_match():
     update_status("⚽ Đang vào chế độ Career...")
-    tap(200, 200)   # CAREER
+    tap(200, 200) # CAREER
     time.sleep(2)
     update_status("⚽ Đang vào chế độ Academy division...")
-    tap(350, 210)   # Global Challenge Cup
+    tap(350, 210) # Global Challenge Cup
     time.sleep(2)
     update_status("💙 Bấm play")
-    tap(1350, 687)   # Global Challenge Cup
+    tap(1350, 687) # Global Challenge Cup
     time.sleep(2)
     tap(300, 300)
     time.sleep(3)
-
 
 def auto_play():
     global running
@@ -124,8 +150,6 @@ def player_random_Kick():
     random.choice([player_go_presure, player_go_hardKick])()
 # === GUI ===
 
-
-
 def update_status(text):
     status_label.config(text=text)
     root.update()
@@ -155,8 +179,14 @@ root = tk.Tk()
 root.title("🎮 Auto DLS Controller")
 root.geometry("400x500")
 
-start_button = tk.Button(root, text="▶️ Start", font=("Arial", 14), width=10, command=start_process)
-start_button.pack(pady=10)
+start_emulator_btn = tk.Button(root, text="▶️ Mở trình giả lập dnplayer", font=("Arial", 14), width=20, command=start_emulator)
+start_emulator_btn.pack(pady=5)
+
+start_scrcpy_btn = tk.Button(root, text="▶️ Mở trình SCRCPY", font=("Arial", 14), width=20, command=start_scrcpy_usb)
+start_scrcpy_btn.pack(pady=5)
+
+start_button = tk.Button(root, text="▶️ Start Game", font=("Arial", 14), width=15, command=start_process)
+start_button.pack(pady=5)
 
 start_button = tk.Button(root, text="🚲 Auto Play", font=("Arial", 13), width=15, command=player_random_act)
 start_button.pack(pady=5)
