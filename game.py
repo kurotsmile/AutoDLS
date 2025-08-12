@@ -177,18 +177,18 @@ def full_run():
 
 root = tk.Tk()
 root.title("🎮 Auto DLS Controller")
-root.geometry("400x500")
+root.geometry("500x500")
 
-start_emulator_btn = tk.Button(root, text="▶️ Mở trình giả lập dnplayer", font=("Arial", 14), width=20, command=start_emulator)
-start_emulator_btn.pack(pady=5)
+start_emulator_btn = tk.Button(root, text="▶️ Mở trình giả lập dnplayer", font=("Arial", 14), width=30, command=start_emulator)
+start_emulator_btn.pack(pady=10)
 
 start_scrcpy_btn = tk.Button(root, text="▶️ Mở trình SCRCPY", font=("Arial", 14), width=20, command=start_scrcpy_usb)
 start_scrcpy_btn.pack(pady=5)
 
-start_button = tk.Button(root, text="▶️ Start Game", font=("Arial", 14), width=15, command=start_process)
+start_button = tk.Button(root, text="🚀 Start Game", font=("Arial", 14), width=15, command=start_process)
 start_button.pack(pady=5)
 
-start_button = tk.Button(root, text="🚲 Auto Play", font=("Arial", 13), width=15, command=player_random_act)
+start_button = tk.Button(root, text="🚲 Auto Play", font=("Arial", 13), width=15, command=run_loop)
 start_button.pack(pady=5)
 
 stop_button = tk.Button(root, text="⏹ Stop", font=("Arial", 14), width=10, command=stop_process)
