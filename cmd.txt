@@ -1,1 +1,8 @@
+#python
 pip install opencv-python
+pip install pyautogui
+
+
+#adb
+adb disconnect 127.0.0.1:5555
+adb disconnect emulator-5554
