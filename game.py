@@ -16,6 +16,11 @@ adb_path = os.path.join(os.getcwd(), "adb.exe")
 scrcpy_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scrcpy.exe")
 LDPLAYER_PATH = r'"C:\LDPlayer\LDPlayer4.0\dnplayer.exe"'
 
+def send_key_to_ldplayer(key):
+    subprocess.run(['nircmd', 'win', 'activate', 'ititle', 'LDPlayer'])
+    time.sleep(0.2)  # chờ LDPlayer focus
+    subprocess.run(['nircmd', 'sendkeypress', key])
+
 def start_emulator():
     update_status("🔄 Đang khởi động giả lập...")
     os.system(f'start {LDPLAYER_PATH}')
@@ -39,7 +44,7 @@ def capture_screen():
 
 
 def open_match():
-    time.sleep(9)
+    time.sleep(20)
     update_status("⚽ Đang vào chế độ Career...")
     tap(300, 210)
     time.sleep(3)
@@ -57,7 +62,13 @@ def run_loop():
     global running
     if running:
         player_random_act()
-        root.after(2000, run_loop) 
+        root.after(random.randint(500,3000), run_loop) 
+
+def auto_play():
+    global running
+    running=True
+    update_status("🚕 Tự động chơi")
+    run_loop()
 
 def player_random_act():
     random.choice([player_go_right, player_go_left,player_go_up,player_go_down, player_go_left,player_go_right, player_go_left,player_go_right])()
@@ -87,11 +98,13 @@ def player_go_down():
     time.sleep(1)
 
 def player_go_presure():
-    tap(1184,625)
+    update_status("⚽ player_go_presure")
+    send_key_to_ldplayer("K")
     time.sleep(1)
 
 def player_go_hardKick():
-    tap(1368,625)
+    update_status("⚽ player_go_hardKick")
+    send_key_to_ldplayer("L")
     time.sleep(1)
 
 def player_random_Kick():
@@ -116,7 +129,7 @@ def full_run():
     try:
         open_game()
         open_match()
-        #auto_play()
+        run_loop()
     except Exception as e:
         update_status(f"❌ Lỗi: {e}")
         messagebox.showerror("Lỗi", str(e))
@@ -135,7 +148,7 @@ start_emulator_btn.pack(pady=10)
 start_button = tk.Button(root, text="🚀 Start Game", font=("Arial", 14), width=15, command=start_process)
 start_button.pack(pady=5)
 
-start_button = tk.Button(root, text="🚲 Auto Play", font=("Arial", 13), width=15, command=run_loop)
+start_button = tk.Button(root, text="🚲 Auto Play", font=("Arial", 13), width=15, command=auto_play)
 start_button.pack(pady=5)
 
 start_button = tk.Button(root, text="🚲 Test", font=("Arial", 13), width=15, command=test)
