@@ -79,42 +79,34 @@ def player_random_act():
 
 def player_go_right():
     update_status("⚽ Di chuyển trái")
-    if random.choice([True, False]):
-        swipe(300, 513, 500, 513, 2200)  # chạy phải
-        player_random_Kick()
-    else:
-        player_random_Kick()
-        swipe(300, 513, 500, 513, 2200)  # chạy phải
+    t1 = threading.Thread(target=lambda: swipe(300, 513, 500, 513, 2200))
+    t2 = threading.Thread(target=player_random_Kick)
+    t1.start()
+    t2.start()
     time.sleep(1)
 
 def player_go_left():
     update_status("⚽ Di chuyển phải")
-    if random.choice([True, False]):
-        swipe(271, 500, 140, 500, 2200)  # chạy trái
-        player_random_Kick()
-    else:
-        player_random_Kick()
-        swipe(271, 500, 140, 500, 2200)
+    t1 = threading.Thread(target=lambda: swipe(271, 500, 140, 500, 2200))
+    t2 = threading.Thread(target=player_random_Kick)
+    t1.start()
+    t2.start()
     time.sleep(1)
 
 def player_go_up():
     update_status("⚽ Di chuyển lên")
-    if random.choice([True, False]):
-        swipe(271, 500, 271, 360, 2200)  # chạy lên
-        player_random_Kick()
-    else:
-        player_random_Kick()
-        swipe(271, 500, 271, 360, 2200)  # chạy lên
+    t1 = threading.Thread(target=lambda: swipe(271, 500, 271, 360, 2200))
+    t2 = threading.Thread(target=player_random_Kick)
+    t1.start()
+    t2.start()
     time.sleep(1)
 
 def player_go_down():
     update_status("⚽ Di chuyển xuống")
-    if random.choice([True, False]):
-        swipe(271, 500, 271, 627, 2200)  # chạy xuống
-        player_random_Kick()
-    else:
-        player_random_Kick()
-        swipe(271, 500, 271, 627, 2200)  # chạy xuống
+    t1 = threading.Thread(target=lambda: swipe(271, 500, 271, 627, 2200))
+    t2 = threading.Thread(target=player_random_Kick)
+    t1.start()
+    t2.start()
     time.sleep(1)
 
 def player_go_presure():
